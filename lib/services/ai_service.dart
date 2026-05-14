@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class AIService {
   // Vercel API URL ✅
   static const String _backendUrl =
-      'https://sine-95nv5yjof-suryaroy1008-4764s-projects.vercel.app/api/chat';
+      'https://sine-ai.vercel.app/api/chat';
 
   static List<Map<String, dynamic>> _history = [];
 
@@ -29,8 +29,9 @@ class AIService {
           )
           .timeout(const Duration(seconds: 15));
 
+      final data = jsonDecode(response.body);
+
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
         final reply = data['reply'] as String;
 
         _history.add({
@@ -46,7 +47,8 @@ class AIService {
 
         return reply;
       } else {
-        return 'Yaar kuch problem ho gayi! 😅';
+        // Return the specific error message from backend if available
+        return data['message'] ?? data['error'] ?? 'Yaar kuch problem ho gayi! 😅';
       }
     } catch (e) {
       print("AI Error: $e");
