@@ -9,6 +9,7 @@ class AIService {
   static List<Map<String, dynamic>> _history = [];
 
   static Future<String> sendMessage(String userMessage) async {
+    print("Calling API: $_backendUrl");
     try {
       _history.add({
         'role': 'user',
@@ -48,7 +49,8 @@ class AIService {
         return 'Yaar kuch problem ho gayi! 😅';
       }
     } catch (e) {
-      return 'Internet check kar bhai! 🔌';
+      print("AI Error: $e");
+      return 'Error: $e';
     }
   }
 

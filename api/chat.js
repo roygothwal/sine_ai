@@ -114,7 +114,7 @@ Max 3 lines. Emojis use kar naturally.`;
       console.log(`${api.name} success!`);
       return res.status(200).json({ reply, provider: api.name });
     } catch (error) {
-      console.error(`${api.name} failed:`, error.message);
+    console.error(`${api.name} failed:`, error);
       continue;
     }
   }

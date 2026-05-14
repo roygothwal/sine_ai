@@ -46,6 +46,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     _scrollToBottom();
 
     final reply = await AIService.sendMessage(text);
+    print("AI Response: $reply");
 
     if (mounted) {
       setState(() {
