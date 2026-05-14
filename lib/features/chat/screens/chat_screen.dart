@@ -82,19 +82,22 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
     final ext = theme.extension<AppThemeExtension>()!;
     final font = ref.watch(fontProvider);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor,
-      ),
-      child: SafeArea(
-        child: Column(
-          children: [
-            _buildHeader(theme, ext, font),
-            Expanded(
-              child: _buildMessageList(theme, ext, font),
-            ),
-            _buildInputBar(theme, ext, font),
-          ],
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.scaffoldBackgroundColor,
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              _buildHeader(theme, ext, font),
+              Expanded(
+                child: _buildMessageList(theme, ext, font),
+              ),
+              _buildInputBar(theme, ext, font),
+            ],
+          ),
         ),
       ),
     );
@@ -446,7 +449,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
         maxLines: null,
         minLines: 1,
         keyboardType: TextInputType.multiline,
-        textInputAction: TextInputAction.newline,
+        textInputAction: TextInputAction.send,
+        onSubmitted: (_) => _send(),
         decoration: InputDecoration(
           hintText: AppStrings.get('chat_hint'),
           hintStyle: GoogleFonts.getFont(font, 
