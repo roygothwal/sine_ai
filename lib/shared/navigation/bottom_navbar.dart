@@ -149,41 +149,12 @@ class BottomNav extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: isSelected ? 32 : 28,
-              height: isSelected ? 32 : 28,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: isSelected 
-                    ? LinearGradient(
-                        colors: [
-                          theme.colorScheme.primary,
-                          theme.colorScheme.secondary,
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      )
-                    : null,
-                color: isSelected ? null : ext.textSecondary?.withValues(alpha: 0.4),
-                boxShadow: isSelected ? [
-                  BoxShadow(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.4),
-                    blurRadius: 10,
-                    spreadRadius: 2,
-                  ),
-                ] : null,
-              ),
-              child: ClipOval(
-                child: Image.asset(
-                  'assets/images/aura_avatar_3d.png',
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Icon(
-                    Icons.chat_bubble_rounded,
-                    color: Colors.white,
-                    size: isSelected ? 18 : 16,
-                  ),
-                ),
-              ),
+            Icon(
+              Icons.chat_bubble_rounded,
+              color: isSelected 
+                  ? theme.colorScheme.primary 
+                  : ext.textSecondary?.withValues(alpha: 0.4),
+              size: isSelected ? 26 : 24,
             ),
             if (isSelected) ...[
               const SizedBox(height: 4),
