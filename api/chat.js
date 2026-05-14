@@ -89,7 +89,7 @@ Max 3 lines. Emojis use kar naturally.`;
 
     const data = await response.json();
     if (!response.ok) throw new Error(`Groq API Error: ${data.error?.message || response.statusText}`);
-    return data.choices[0].message.content;
+    return data?.choices?.[0]?.message?.content || "No response";
   }
 
   // 3. MISTRAL
@@ -184,3 +184,5 @@ Max 3 lines. Emojis use kar naturally.`;
     message: "Yaar, saare AI thak gaye hain. Thodi der baad try karo! 😅" 
   });
 }
+
+
