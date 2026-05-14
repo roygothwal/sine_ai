@@ -419,10 +419,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
       decoration: BoxDecoration(
         color: theme.scaffoldBackgroundColor,
         border: Border(
-          top: BorderSide(color: ext.border ?? Colors.transparent),
+          top: BorderSide(color: ext.border?.withValues(alpha: 0.2) ?? Colors.transparent),
         ),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Expanded(
             child: _buildTextField(theme, ext, font),
@@ -436,63 +437,72 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
 
   Widget _buildTextField(ThemeData theme, AppThemeExtension ext, String font) {
     return Container(
+      constraints: const BoxConstraints(maxHeight: 150),
       decoration: BoxDecoration(
         color: ext.card,
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(color: ext.border ?? Colors.transparent),
       ),
       child: TextField(
         controller: _controller,
         style: GoogleFonts.getFont(font, 
-          fontSize: 14, 
+          fontSize: 15, 
           color: theme.colorScheme.onSurface,
+          height: 1.4,
         ),
+        maxLines: null,
+        minLines: 1,
+        keyboardType: TextInputType.multiline,
+        textInputAction: TextInputAction.newline,
         decoration: InputDecoration(
           hintText: AppStrings.get('chat_hint'),
           hintStyle: GoogleFonts.getFont(font, 
             color: ext.textSecondary?.withValues(alpha: 0.5),
+            fontSize: 14,
           ),
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+          isDense: true,
         ),
-        onSubmitted: (_) => _send(),
-        textInputAction: TextInputAction.send,
       ),
     );
   }
 
   Widget _buildSendButton(ThemeData theme) {
-    return GestureDetector(
-      onTap: _send,
-      child: Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: LinearGradient(
-            colors: [
-              theme.colorScheme.primary,
-              theme.colorScheme.secondary,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: theme.colorScheme.primary.withValues(alpha: 0.3),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 2),
+      child: GestureDetector(
+        onTap: _send,
+        child: Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+              colors: [
+                theme.colorScheme.primary,
+                theme.colorScheme.secondary,
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-          ],
-        ),
-        child: const Icon(
-          Icons.send_rounded,
-          color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: theme.colorScheme.primary.withValues(alpha: 0.35),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: const Icon(
+            Icons.send_rounded,
+            color: Colors.white,
           size: 20,
         ),
       ),
+    ),
     );
   }
 }

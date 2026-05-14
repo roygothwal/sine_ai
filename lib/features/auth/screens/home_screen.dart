@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sine_ai/shared/navigation/bottom_navbar.dart';
 import 'package:sine_ai/features/aura/screens/aura_screen.dart';
 import 'package:sine_ai/features/chat/screens/chat_screen.dart';
+import 'package:sine_ai/features/sine_play/sine_play_screen.dart';
 import 'package:sine_ai/features/alerts/screens/alarm_screen.dart';
 import 'package:sine_ai/features/profile/screens/profile_screen.dart';
 
@@ -18,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _screens = const [
     AuraScreen(),
     ChatScreen(),
+    SinePlayScreen(),
     AlarmScreen(),
     ProfileScreen(),
   ];
