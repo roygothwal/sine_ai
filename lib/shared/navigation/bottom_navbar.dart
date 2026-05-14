@@ -79,8 +79,8 @@ class BottomNav extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: isSelected ? 32 : 28,
-              height: isSelected ? 32 : 28,
+              width: isSelected ? 28 : 24,
+              height: isSelected ? 28 : 24,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: isSelected 
@@ -109,7 +109,7 @@ class BottomNav extends ConsumerWidget {
                   errorBuilder: (_, __, ___) => Icon(
                     Icons.auto_awesome_rounded,
                     color: Colors.white,
-                    size: isSelected ? 18 : 16,
+                    size: isSelected ? 16 : 14,
                   ),
                 ),
               ),
