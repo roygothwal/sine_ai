@@ -26,22 +26,34 @@ class BottomNav extends ConsumerWidget {
       height: 72,
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 24),
       decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor.withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: ext.border ?? Colors.transparent, width: 1.5),
+        color: theme.scaffoldBackgroundColor.withValues(alpha: 0.85),
+        borderRadius: BorderRadius.circular(35),
+        border: Border.all(
+          color: ext.border ?? Colors.transparent,
+          width: 1.5,
+        ),
         boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 20, offset: const Offset(0, 10)),
+          BoxShadow(
+            color: theme.colorScheme.primary.withValues(alpha: 0.1),
+            blurRadius: 25,
+            offset: const Offset(0, 15),
+          ),
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(35),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _navItem(0, Icons.auto_awesome_rounded, AppStrings.get('aura'), font, theme, ext),
             _navItem(1, Icons.chat_bubble_rounded, AppStrings.get('chats'), font, theme, ext),
             _navItem(2, Icons.notifications_active_rounded, AppStrings.get('alerts'), font, theme, ext),
-            _navItem(3, Icons.person_rounded, AppStrings.get('profile'), font, theme, ext),
+            _profileItem(3, AppStrings.get('profile'), font, theme, ext),
           ],
         ),
       ),
@@ -57,24 +69,115 @@ class BottomNav extends ConsumerWidget {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutBack,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.1) : Colors.transparent,
+          color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.15) : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              color: isSelected ? theme.colorScheme.primary : ext.textSecondary?.withValues(alpha: 0.5),
-              size: 24,
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              child: Icon(
+                icon,
+                color: isSelected 
+                    ? theme.colorScheme.primary 
+                    : ext.textSecondary?.withValues(alpha: 0.4),
+                size: isSelected ? 26 : 24,
+              ),
             ),
             if (isSelected) ...[
               const SizedBox(height: 4),
-              Text(
-                label,
-                style: GoogleFonts.getFont(font, fontSize: 10, fontWeight: FontWeight.w800, color: theme.colorScheme.primary),
+              AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: 1,
+                child: Text(
+                  label,
+                  style: GoogleFonts.getFont(font, 
+                    fontSize: 10, 
+                    fontWeight: FontWeight.w800, 
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              ),
+            ]
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _profileItem(int index, String label, String font, ThemeData theme, AppThemeExtension ext) {
+    final isSelected = currentIndex == index;
+    
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.lightImpact();
+        onTap(index);
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutBack,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.15) : Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              width: isSelected ? 36 : 32,
+              height: isSelected ? 36 : 32,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: isSelected 
+                    ? LinearGradient(
+                        colors: [
+                          theme.colorScheme.primary,
+                          theme.colorScheme.secondary,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )
+                    : null,
+                color: isSelected ? null : ext.textSecondary?.withValues(alpha: 0.3),
+                boxShadow: isSelected ? [
+                  BoxShadow(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.4),
+                    blurRadius: 12,
+                    spreadRadius: 2,
+                  ),
+                ] : null,
+              ),
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/aura_avatar_3d.png',
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => Icon(
+                    Icons.person_rounded,
+                    color: Colors.white,
+                    size: isSelected ? 20 : 18,
+                  ),
+                ),
+              ),
+            ),
+            if (isSelected) ...[
+              const SizedBox(height: 4),
+              AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: 1,
+                child: Text(
+                  label,
+                  style: GoogleFonts.getFont(font, 
+                    fontSize: 10, 
+                    fontWeight: FontWeight.w800, 
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
               ),
             ]
           ],
