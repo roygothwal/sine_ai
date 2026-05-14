@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sine_ai/core/providers/app_providers.dart';
-import 'package:sine_ai/localization/app_strings.dart';
 import 'package:sine_ai/themes/theme_extensions.dart';
 
 class BottomNav extends ConsumerWidget {
@@ -23,34 +22,34 @@ class BottomNav extends ConsumerWidget {
     final font = ref.watch(fontProvider);
 
     return Container(
-      height: 80,
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+      height: 70,
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor.withValues(alpha: 0.9),
-        borderRadius: BorderRadius.circular(40),
+        color: theme.scaffoldBackgroundColor.withValues(alpha: 0.92),
+        borderRadius: BorderRadius.circular(35),
         border: Border.all(
-          color: ext.border?.withValues(alpha: 0.3) ?? Colors.transparent,
-          width: 1.5,
+          color: ext.border?.withValues(alpha: 0.2) ?? Colors.transparent,
+          width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.primary.withValues(alpha: 0.1),
-            blurRadius: 30,
-            offset: const Offset(0, 15),
+            color: theme.colorScheme.primary.withValues(alpha: 0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.15),
-            blurRadius: 25,
-            offset: const Offset(0, 10),
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(40),
+        borderRadius: BorderRadius.circular(35),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 6),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _auraItem(0, font, theme, ext),
               _chatItem(1, font, theme, ext),
@@ -72,14 +71,14 @@ class BottomNav extends ConsumerWidget {
         onTap(index);
       },
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        padding: const EdgeInsets.all(10),
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 26,
-              height: 26,
+              width: 24,
+              height: 24,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: isSelected 
@@ -91,17 +90,17 @@ class BottomNav extends ConsumerWidget {
                     : null,
                 color: isSelected ? null : ext.textSecondary?.withValues(alpha: 0.3),
                 boxShadow: isSelected ? [
-                  BoxShadow(color: theme.colorScheme.primary.withValues(alpha: 0.4), blurRadius: 8, spreadRadius: 1),
+                  BoxShadow(color: theme.colorScheme.primary.withValues(alpha: 0.4), blurRadius: 6, spreadRadius: 1),
                 ] : null,
               ),
               child: ClipOval(
                 child: Image.asset('assets/images/aura_avatar_3d_v2.png', fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 14),
+                  errorBuilder: (_, __, ___) => Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 12),
                 ),
               ),
             ),
-            if (isSelected) const SizedBox(height: 4),
-            if (isSelected) Text('Aura', style: GoogleFonts.getFont(font, fontSize: 9, fontWeight: FontWeight.w700, color: theme.colorScheme.primary)),
+            if (isSelected) const SizedBox(height: 3),
+            if (isSelected) Text('Aura', style: GoogleFonts.getFont(font, fontSize: 8, fontWeight: FontWeight.w700, color: theme.colorScheme.primary)),
           ],
         ),
       ),
@@ -116,18 +115,26 @@ class BottomNav extends ConsumerWidget {
         onTap(index);
       },
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        padding: const EdgeInsets.all(10),
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.chat_bubble_rounded,
-              color: isSelected ? theme.colorScheme.primary : ext.textSecondary?.withValues(alpha: 0.4),
-              size: 24,
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.15) : Colors.transparent,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                Icons.chat_rounded,
+                color: isSelected ? theme.colorScheme.primary : ext.textSecondary?.withValues(alpha: 0.4),
+                size: 22,
+              ),
             ),
-            if (isSelected) const SizedBox(height: 4),
-            if (isSelected) Text('Chat', style: GoogleFonts.getFont(font, fontSize: 9, fontWeight: FontWeight.w700, color: theme.colorScheme.primary)),
+            if (isSelected) const SizedBox(height: 3),
+            if (isSelected) Text('Chat', style: GoogleFonts.getFont(font, fontSize: 8, fontWeight: FontWeight.w700, color: theme.colorScheme.primary)),
           ],
         ),
       ),
@@ -142,15 +149,14 @@ class BottomNav extends ConsumerWidget {
         onTap(index);
       },
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 250),
         curve: Curves.easeOutBack,
-        padding: const EdgeInsets.all(4),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: isSelected ? 58 : 54,
-              height: isSelected ? 58 : 54,
+              width: 52,
+              height: 52,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: LinearGradient(
@@ -163,14 +169,10 @@ class BottomNav extends ConsumerWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.5),
-                    blurRadius: 20,
-                    spreadRadius: isSelected ? 4 : 2,
-                  ),
-                  BoxShadow(
-                    color: theme.colorScheme.secondary.withValues(alpha: 0.3),
-                    blurRadius: 15,
-                    spreadRadius: 1,
+                    color: theme.colorScheme.primary.withValues(alpha: 0.45),
+                    blurRadius: 16,
+                    spreadRadius: isSelected ? 3 : 1,
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
@@ -180,28 +182,28 @@ class BottomNav extends ConsumerWidget {
                   Icon(
                     Icons.sports_esports_rounded,
                     color: Colors.white,
-                    size: isSelected ? 28 : 26,
+                    size: 26,
                   ),
                   if (!isSelected)
                     Positioned(
-                      top: 2,
-                      right: 2,
+                      top: 3,
+                      right: 3,
                       child: Container(
-                        width: 8,
-                        height: 8,
+                        width: 7,
+                        height: 7,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.orange,
-                          boxShadow: [BoxShadow(color: Colors.orange.withValues(alpha: 0.8), blurRadius: 4)],
+                          boxShadow: [BoxShadow(color: Colors.orange.withValues(alpha: 0.8), blurRadius: 3)],
                         ),
                       ),
                     ),
                 ],
               ),
             ),
-            if (isSelected) const SizedBox(height: 4),
+            if (isSelected) const SizedBox(height: 3),
             if (isSelected) 
-              Text('SINE Play', style: GoogleFonts.getFont(font, fontSize: 9, fontWeight: FontWeight.w700, color: theme.colorScheme.primary)),
+              Text('SINE Play', style: GoogleFonts.getFont(font, fontSize: 8, fontWeight: FontWeight.w700, color: theme.colorScheme.primary)),
           ],
         ),
       ),
@@ -216,18 +218,26 @@ class BottomNav extends ConsumerWidget {
         onTap(index);
       },
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        padding: const EdgeInsets.all(10),
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.notifications_active_rounded,
-              color: isSelected ? theme.colorScheme.primary : ext.textSecondary?.withValues(alpha: 0.4),
-              size: 24,
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.15) : Colors.transparent,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                Icons.notifications_rounded,
+                color: isSelected ? theme.colorScheme.primary : ext.textSecondary?.withValues(alpha: 0.4),
+                size: 22,
+              ),
             ),
-            if (isSelected) const SizedBox(height: 4),
-            if (isSelected) Text('Alerts', style: GoogleFonts.getFont(font, fontSize: 9, fontWeight: FontWeight.w700, color: theme.colorScheme.primary)),
+            if (isSelected) const SizedBox(height: 3),
+            if (isSelected) Text('Alerts', style: GoogleFonts.getFont(font, fontSize: 8, fontWeight: FontWeight.w700, color: theme.colorScheme.primary)),
           ],
         ),
       ),
@@ -242,18 +252,26 @@ class BottomNav extends ConsumerWidget {
         onTap(index);
       },
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        padding: const EdgeInsets.all(10),
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.person_rounded,
-              color: isSelected ? theme.colorScheme.primary : ext.textSecondary?.withValues(alpha: 0.4),
-              size: 24,
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.15) : Colors.transparent,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                Icons.person_rounded,
+                color: isSelected ? theme.colorScheme.primary : ext.textSecondary?.withValues(alpha: 0.4),
+                size: 22,
+              ),
             ),
-            if (isSelected) const SizedBox(height: 4),
-            if (isSelected) Text('Profile', style: GoogleFonts.getFont(font, fontSize: 9, fontWeight: FontWeight.w700, color: theme.colorScheme.primary)),
+            if (isSelected) const SizedBox(height: 3),
+            if (isSelected) Text('Profile', style: GoogleFonts.getFont(font, fontSize: 8, fontWeight: FontWeight.w700, color: theme.colorScheme.primary)),
           ],
         ),
       ),

@@ -415,40 +415,33 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
 
   Widget _buildInputBar(ThemeData theme, AppThemeExtension ext, String font) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
       decoration: BoxDecoration(
         color: theme.scaffoldBackgroundColor,
-        border: Border(
-          top: BorderSide(color: ext.border?.withValues(alpha: 0.2) ?? Colors.transparent),
-        ),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Expanded(
-            child: _buildTextField(theme, ext, font),
-          ),
-          const SizedBox(width: 10),
-          _buildSendButton(theme),
-        ],
+      child: SafeArea(
+        top: false,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(child: _buildTextField(theme, ext, font)),
+            const SizedBox(width: 8),
+            _buildSendButton(theme),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildTextField(ThemeData theme, AppThemeExtension ext, String font) {
-    return Container(
-      constraints: const BoxConstraints(maxHeight: 150),
-      decoration: BoxDecoration(
-        color: ext.card,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: ext.border ?? Colors.transparent),
-      ),
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxHeight: 120),
       child: TextField(
         controller: _controller,
         style: GoogleFonts.getFont(font, 
           fontSize: 15, 
           color: theme.colorScheme.onSurface,
-          height: 1.4,
+          height: 1.3,
         ),
         maxLines: null,
         minLines: 1,
@@ -460,12 +453,24 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
             color: ext.textSecondary?.withValues(alpha: 0.5),
             fontSize: 14,
           ),
-          border: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
+          filled: true,
+          fillColor: ext.card,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.3), width: 1),
+          ),
           contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           isDense: true,
         ),
+      ),
       ),
     );
   }
