@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>116497071695-k640eqm7fl0bu30nefuhhkamea69acbl.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.116497071695-k640eqm7fl0bu30nefuhhkamea69acbl</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>116497071695-v55ibuvudh0jj3qlccaf4f99gt38tf59.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBPTA8-1jyDsvn-O0cDNYX3kjNyNsBkutQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>116497071695</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.sineai.app</string>
+	<key>PROJECT_ID</key>
+	<string>sine-ai-1008</string>
+	<key>STORAGE_BUCKET</key>
+	<string>sine-ai-1008.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:116497071695:ios:19787e2ad5271f1fdf743a</string>
+</dict>
+</plist>

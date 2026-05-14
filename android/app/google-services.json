@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "116497071695",
+    "project_id": "sine-ai-1008",
+    "storage_bucket": "sine-ai-1008.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:116497071695:android:01a2838887046c78df743a",
+        "android_client_info": {
+          "package_name": "com.example.sine_ai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "116497071695-v55ibuvudh0jj3qlccaf4f99gt38tf59.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sine_ai",
+            "certificate_hash": "c7d1609bb61c4c847b1e64cd7a62119878d8c07a"
+          }
+        },
+        {
+          "client_id": "116497071695-o8ptt34kca2blaigc41f2gk0g9rf94j8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAHuSs3rqmADa5epR_aPRn2IMblpSFRcE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "116497071695-o8ptt34kca2blaigc41f2gk0g9rf94j8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
