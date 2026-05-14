@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sine_ai/core/providers/app_providers.dart';
@@ -22,32 +21,27 @@ class BottomNav extends ConsumerWidget {
     final font = ref.watch(fontProvider);
 
     return Container(
-      height: 70,
+      height: 68,
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor.withValues(alpha: 0.92),
-        borderRadius: BorderRadius.circular(35),
+        color: theme.scaffoldBackgroundColor.withValues(alpha: 0.95),
+        borderRadius: BorderRadius.circular(34),
         border: Border.all(
-          color: ext.border?.withValues(alpha: 0.2) ?? Colors.transparent,
+          color: ext.border?.withValues(alpha: 0.15) ?? Colors.transparent,
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.primary.withValues(alpha: 0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: theme.colorScheme.primary.withValues(alpha: 0.06),
             blurRadius: 15,
-            offset: const Offset(0, 5),
+            offset: const Offset(0, 6),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(35),
+        borderRadius: BorderRadius.circular(34),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -66,19 +60,16 @@ class BottomNav extends ConsumerWidget {
   Widget _auraItem(int index, String font, ThemeData theme, AppThemeExtension ext) {
     final isSelected = currentIndex == index;
     return GestureDetector(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        onTap(index);
-      },
+      onTap: () => onTap(index),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 100),
         padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 24,
-              height: 24,
+              width: 26,
+              height: 26,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: isSelected 
@@ -88,14 +79,14 @@ class BottomNav extends ConsumerWidget {
                         end: Alignment.bottomRight,
                       )
                     : null,
-                color: isSelected ? null : ext.textSecondary?.withValues(alpha: 0.3),
+                color: isSelected ? null : Colors.transparent,
                 boxShadow: isSelected ? [
-                  BoxShadow(color: theme.colorScheme.primary.withValues(alpha: 0.4), blurRadius: 6, spreadRadius: 1),
+                  BoxShadow(color: theme.colorScheme.primary.withValues(alpha: 0.5), blurRadius: 8, spreadRadius: 1),
                 ] : null,
               ),
               child: ClipOval(
                 child: Image.asset('assets/images/aura_avatar_3d_v2.png', fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 12),
+                  errorBuilder: (_, __, ___) => Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 14),
                 ),
               ),
             ),
@@ -110,27 +101,37 @@ class BottomNav extends ConsumerWidget {
   Widget _chatItem(int index, String font, ThemeData theme, AppThemeExtension ext) {
     final isSelected = currentIndex == index;
     return GestureDetector(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        onTap(index);
-      },
+      onTap: () => onTap(index),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 100),
         padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.all(6),
+            Container(
+              width: 28,
+              height: 28,
               decoration: BoxDecoration(
-                color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.15) : Colors.transparent,
-                borderRadius: BorderRadius.circular(12),
+                shape: BoxShape.circle,
+                gradient: isSelected 
+                    ? LinearGradient(
+                        colors: [
+                          theme.colorScheme.primary.withValues(alpha: 0.9),
+                          theme.colorScheme.secondary,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )
+                    : null,
+                color: isSelected ? null : ext.textSecondary?.withValues(alpha: 0.15),
+                boxShadow: isSelected ? [
+                  BoxShadow(color: theme.colorScheme.primary.withValues(alpha: 0.4), blurRadius: 10, spreadRadius: 1),
+                ] : null,
               ),
               child: Icon(
                 Icons.chat_rounded,
-                color: isSelected ? theme.colorScheme.primary : ext.textSecondary?.withValues(alpha: 0.4),
-                size: 22,
+                color: isSelected ? Colors.white : ext.textSecondary?.withValues(alpha: 0.5),
+                size: 16,
               ),
             ),
             if (isSelected) const SizedBox(height: 3),
@@ -144,19 +145,15 @@ class BottomNav extends ConsumerWidget {
   Widget _sinePlayItem(int index, String font, ThemeData theme, AppThemeExtension ext) {
     final isSelected = currentIndex == index;
     return GestureDetector(
-      onTap: () {
-        HapticFeedback.heavyImpact();
-        onTap(index);
-      },
+      onTap: () => onTap(index),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeOutBack,
+        duration: const Duration(milliseconds: 100),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 52,
-              height: 52,
+              width: 50,
+              height: 50,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: LinearGradient(
@@ -169,10 +166,10 @@ class BottomNav extends ConsumerWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.45),
-                    blurRadius: 16,
-                    spreadRadius: isSelected ? 3 : 1,
-                    offset: const Offset(0, 4),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.5),
+                    blurRadius: 14,
+                    spreadRadius: isSelected ? 2 : 1,
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
@@ -182,19 +179,19 @@ class BottomNav extends ConsumerWidget {
                   Icon(
                     Icons.sports_esports_rounded,
                     color: Colors.white,
-                    size: 26,
+                    size: 24,
                   ),
                   if (!isSelected)
                     Positioned(
-                      top: 3,
-                      right: 3,
+                      top: 2,
+                      right: 2,
                       child: Container(
-                        width: 7,
-                        height: 7,
+                        width: 8,
+                        height: 8,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.orange,
-                          boxShadow: [BoxShadow(color: Colors.orange.withValues(alpha: 0.8), blurRadius: 3)],
+                          boxShadow: [BoxShadow(color: Colors.orange.withValues(alpha: 0.8), blurRadius: 4)],
                         ),
                       ),
                     ),
@@ -213,27 +210,37 @@ class BottomNav extends ConsumerWidget {
   Widget _alertsItem(int index, String font, ThemeData theme, AppThemeExtension ext) {
     final isSelected = currentIndex == index;
     return GestureDetector(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        onTap(index);
-      },
+      onTap: () => onTap(index),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 100),
         padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.all(6),
+            Container(
+              width: 28,
+              height: 28,
               decoration: BoxDecoration(
-                color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.15) : Colors.transparent,
-                borderRadius: BorderRadius.circular(12),
+                shape: BoxShape.circle,
+                gradient: isSelected 
+                    ? LinearGradient(
+                        colors: [
+                          theme.colorScheme.primary.withValues(alpha: 0.9),
+                          theme.colorScheme.secondary,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )
+                    : null,
+                color: isSelected ? null : ext.textSecondary?.withValues(alpha: 0.15),
+                boxShadow: isSelected ? [
+                  BoxShadow(color: theme.colorScheme.primary.withValues(alpha: 0.4), blurRadius: 10, spreadRadius: 1),
+                ] : null,
               ),
               child: Icon(
                 Icons.notifications_rounded,
-                color: isSelected ? theme.colorScheme.primary : ext.textSecondary?.withValues(alpha: 0.4),
-                size: 22,
+                color: isSelected ? Colors.white : ext.textSecondary?.withValues(alpha: 0.5),
+                size: 16,
               ),
             ),
             if (isSelected) const SizedBox(height: 3),
@@ -247,27 +254,37 @@ class BottomNav extends ConsumerWidget {
   Widget _profileItem(int index, String font, ThemeData theme, AppThemeExtension ext) {
     final isSelected = currentIndex == index;
     return GestureDetector(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        onTap(index);
-      },
+      onTap: () => onTap(index),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 100),
         padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.all(6),
+            Container(
+              width: 28,
+              height: 28,
               decoration: BoxDecoration(
-                color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.15) : Colors.transparent,
-                borderRadius: BorderRadius.circular(12),
+                shape: BoxShape.circle,
+                gradient: isSelected 
+                    ? LinearGradient(
+                        colors: [
+                          theme.colorScheme.primary.withValues(alpha: 0.9),
+                          theme.colorScheme.secondary,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )
+                    : null,
+                color: isSelected ? null : ext.textSecondary?.withValues(alpha: 0.15),
+                boxShadow: isSelected ? [
+                  BoxShadow(color: theme.colorScheme.primary.withValues(alpha: 0.4), blurRadius: 10, spreadRadius: 1),
+                ] : null,
               ),
               child: Icon(
-                Icons.person_rounded,
-                color: isSelected ? theme.colorScheme.primary : ext.textSecondary?.withValues(alpha: 0.4),
-                size: 22,
+                Icons.settings_rounded,
+                color: isSelected ? Colors.white : ext.textSecondary?.withValues(alpha: 0.5),
+                size: 16,
               ),
             ),
             if (isSelected) const SizedBox(height: 3),
