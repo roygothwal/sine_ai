@@ -84,14 +84,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
 
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            theme.scaffoldBackgroundColor,
-            theme.scaffoldBackgroundColor.withValues(alpha: 0.95),
-          ],
-        ),
+        color: theme.scaffoldBackgroundColor,
       ),
       child: SafeArea(
         child: Column(
@@ -109,21 +102,46 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
 
   Widget _buildHeader(ThemeData theme, AppThemeExtension ext, String font) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor.withValues(alpha: 0.9),
+        color: theme.scaffoldBackgroundColor,
         border: Border(bottom: BorderSide(color: ext.border ?? Colors.transparent)),
-        boxShadow: [
-          BoxShadow(
-            color: theme.colorScheme.primary.withValues(alpha: 0.05),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
       ),
       child: Row(
         children: [
-          _buildAIAvatar(theme),
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: [
+                  theme.colorScheme.primary,
+                  theme.colorScheme.secondary,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: theme.colorScheme.primary.withValues(alpha: 0.3),
+                  blurRadius: 12,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: ClipOval(
+              child: Image.asset(
+                'assets/images/aura_avatar_3d.png',
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Icon(
+                  Icons.smart_toy_rounded,
+                  color: Colors.white,
+                  size: 22,
+                ),
+              ),
+            ),
+          ),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
@@ -132,139 +150,104 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
                 Text(
                   'SINE CHAT',
                   style: GoogleFonts.getFont(font, 
-                    fontSize: 17, 
+                    fontSize: 16, 
                     fontWeight: FontWeight.w800, 
                     color: theme.colorScheme.onSurface,
-                    letterSpacing: 1.2,
+                    letterSpacing: 1,
                   ),
                 ),
-                const SizedBox(height: 4),
-                _buildOnlineIndicator(theme),
+                const SizedBox(height: 2),
+                Row(
+                  children: [
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.green,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      AppStrings.get('online'),
+                      style: GoogleFonts.getFont('Inter',
+                        fontSize: 11,
+                        color: Colors.green,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
-          _buildMenuButton(theme, ext),
+          GestureDetector(
+            onTap: () => _showChatOptions(context),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: ext.card,
+                border: Border.all(color: ext.border ?? Colors.transparent),
+              ),
+              child: Icon(
+                Icons.more_vert_rounded,
+                color: ext.textSecondary,
+                size: 20,
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildAIAvatar(ThemeData theme) {
-    return Container(
-      width: 48,
-      height: 48,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: LinearGradient(
-          colors: [
-            theme.colorScheme.primary,
-            theme.colorScheme.secondary,
+  void _showChatOptions(BuildContext ctx) {
+    final theme = Theme.of(context);
+    showModalBottomSheet(
+      context: ctx,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: theme.scaffoldBackgroundColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.delete_outline_rounded),
+              title: const Text('Clear Chat'),
+              onTap: () {
+                setState(() {
+                  _messages.clear();
+                  _messages.add({
+                    'text': AppStrings.get('chat_initial'),
+                    'isUser': false,
+                  });
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.refresh_rounded),
+              title: const Text('New Chat'),
+              onTap: () {
+                setState(() {
+                  _messages.clear();
+                  _messages.add({
+                    'text': AppStrings.get('chat_initial'),
+                    'isUser': false,
+                  });
+                  AIService.clearHistory();
+                });
+                Navigator.pop(context);
+              },
+            ),
           ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: theme.colorScheme.primary.withValues(alpha: 0.4),
-            blurRadius: 15,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          ClipOval(
-            child: Image.asset(
-              'assets/images/aura_avatar_3d.png',
-              fit: BoxFit.cover,
-              width: 48,
-              height: 48,
-              errorBuilder: (_, __, ___) => const Icon(
-                Icons.smart_toy_rounded,
-                color: Colors.white,
-                size: 24,
-              ),
-            ),
-          ),
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                colors: [
-                  Colors.transparent,
-                  theme.colorScheme.primary.withValues(alpha: 0.3),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildOnlineIndicator(ThemeData theme) {
-    return Row(
-      children: [
-        Container(
-          width: 8,
-          height: 8,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.green,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.green.withValues(alpha: 0.5),
-                blurRadius: 8,
-                spreadRadius: 1,
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 6),
-        Text(
-          AppStrings.get('online'),
-          style: GoogleFonts.getFont('Inter',
-            fontSize: 12,
-            color: Colors.green,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(width: 8),
-        Container(
-          width: 30,
-          height: 3,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(2),
-            gradient: LinearGradient(
-              colors: [
-                theme.colorScheme.primary,
-                theme.colorScheme.secondary.withValues(alpha: 0.5),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMenuButton(ThemeData theme, AppThemeExtension ext) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: ext.card,
-        border: Border.all(color: ext.border ?? Colors.transparent),
-      ),
-      child: Icon(
-        Icons.more_vert_rounded,
-        color: ext.textSecondary,
-        size: 20,
       ),
     );
   }
@@ -272,7 +255,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
   Widget _buildMessageList(ThemeData theme, AppThemeExtension ext, String font) {
     return ListView.builder(
       controller: _scrollController,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.all(16),
       itemCount: _messages.length + (_isTyping ? 1 : 0),
       itemBuilder: (_, i) {
         if (_isTyping && i == _messages.length) return _buildTyping(theme, ext, font);
@@ -286,26 +269,23 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
     
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.0, end: 1.0),
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOutBack,
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeOut,
       builder: (context, value, child) {
         return Opacity(
           opacity: value,
-          child: Transform.translate(
-            offset: Offset(0, 20 * (1 - value)),
-            child: child,
-          ),
+          child: child,
         );
       },
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.only(bottom: 12),
         child: Row(
           mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             if (!isUser) ...[
               _buildAIMessageAvatar(theme),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
             ],
             Flexible(
               child: _buildMessageBubble(msg, isUser, theme, ext, font),
@@ -318,8 +298,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
 
   Widget _buildAIMessageAvatar(ThemeData theme) {
     return Container(
-      width: 36,
-      height: 36,
+      width: 32,
+      height: 32,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: LinearGradient(
@@ -330,13 +310,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: theme.colorScheme.primary.withValues(alpha: 0.3),
-            blurRadius: 10,
-            spreadRadius: 1,
-          ),
-        ],
       ),
       child: ClipOval(
         child: Image.asset(
@@ -345,7 +318,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
           errorBuilder: (_, __, ___) => Icon(
             Icons.smart_toy_rounded,
             color: Colors.white,
-            size: 18,
+            size: 16,
           ),
         ),
       ),
@@ -366,40 +339,32 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
 
     return Container(
       constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.72),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         gradient: isUser ? gradient : null,
-        color: isUser ? null : ext.card?.withValues(alpha: 0.9),
+        color: isUser ? null : ext.card,
         borderRadius: BorderRadius.only(
-          topLeft: const Radius.circular(24),
-          topRight: const Radius.circular(24),
-          bottomLeft: Radius.circular(isUser ? 24 : 6),
-          bottomRight: Radius.circular(isUser ? 6 : 24),
+          topLeft: const Radius.circular(20),
+          topRight: const Radius.circular(20),
+          bottomLeft: Radius.circular(isUser ? 20 : 4),
+          bottomRight: Radius.circular(isUser ? 4 : 20),
         ),
-        border: isUser 
-            ? null 
-            : Border.all(color: ext.border?.withValues(alpha: 0.3) ?? Colors.transparent),
         boxShadow: [
-          if (isUser)
-            BoxShadow(
-              color: theme.colorScheme.primary.withValues(alpha: 0.25),
-              blurRadius: 15,
-              offset: const Offset(0, 6),
-            )
-          else
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
+          BoxShadow(
+            color: isUser 
+                ? theme.colorScheme.primary.withValues(alpha: 0.2)
+                : Colors.black.withValues(alpha: 0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
         ],
       ),
       child: Text(
         msg['text'] as String,
         style: GoogleFonts.getFont(font,
-          fontSize: 15,
+          fontSize: 14,
           color: isUser ? Colors.white : theme.colorScheme.onSurface,
-          height: 1.45,
+          height: 1.4,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -408,17 +373,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
 
   Widget _buildTyping(ThemeData theme, AppThemeExtension ext, String font) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         children: [
           _buildAIMessageAvatar(theme),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: ext.card?.withValues(alpha: 0.9),
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: ext.border?.withValues(alpha: 0.3) ?? Colors.transparent),
+              color: ext.card,
+              borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -433,23 +397,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
   Widget _buildTypingDot(int i, ThemeData theme) {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.3, end: 1.0),
-      duration: Duration(milliseconds: 500 + i * 150),
+      duration: Duration(milliseconds: 400 + i * 150),
       curve: Curves.easeInOut,
       builder: (context, value, child) {
         return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 3),
-          width: 8,
-          height: 8,
+          margin: const EdgeInsets.symmetric(horizontal: 2),
+          width: 6,
+          height: 6,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: theme.colorScheme.primary.withValues(alpha: value),
-            boxShadow: [
-              BoxShadow(
-                color: theme.colorScheme.primary.withValues(alpha: value * 0.5),
-                blurRadius: 6,
-                spreadRadius: 1,
-              ),
-            ],
           ),
         );
       },
@@ -458,27 +415,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
 
   Widget _buildInputBar(ThemeData theme, AppThemeExtension ext, String font) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
       decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor.withValues(alpha: 0.95),
+        color: theme.scaffoldBackgroundColor,
         border: Border(
-          top: BorderSide(color: ext.border?.withValues(alpha: 0.2) ?? Colors.transparent),
+          top: BorderSide(color: ext.border ?? Colors.transparent),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: theme.colorScheme.primary.withValues(alpha: 0.05),
-            blurRadius: 20,
-            offset: const Offset(0, -5),
-          ),
-        ],
       ),
       child: Row(
         children: [
           Expanded(
             child: _buildTextField(theme, ext, font),
           ),
-          const SizedBox(width: 12),
-          _buildSendButton(theme, ext),
+          const SizedBox(width: 10),
+          _buildSendButton(theme),
         ],
       ),
     );
@@ -487,36 +437,25 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
   Widget _buildTextField(ThemeData theme, AppThemeExtension ext, String font) {
     return Container(
       decoration: BoxDecoration(
-        color: ext.card?.withValues(alpha: 0.9),
+        color: ext.card,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: ext.border?.withValues(alpha: 0.3) ?? Colors.transparent,
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: Border.all(color: ext.border ?? Colors.transparent),
       ),
       child: TextField(
         controller: _controller,
         style: GoogleFonts.getFont(font, 
-          fontSize: 15, 
+          fontSize: 14, 
           color: theme.colorScheme.onSurface,
         ),
         decoration: InputDecoration(
           hintText: AppStrings.get('chat_hint'),
           hintStyle: GoogleFonts.getFont(font, 
-            color: ext.textSecondary?.withValues(alpha: 0.4),
-            fontSize: 14,
+            color: ext.textSecondary?.withValues(alpha: 0.5),
           ),
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
         ),
         onSubmitted: (_) => _send(),
         textInputAction: TextInputAction.send,
@@ -524,13 +463,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
     );
   }
 
-  Widget _buildSendButton(ThemeData theme, AppThemeExtension ext) {
+  Widget _buildSendButton(ThemeData theme) {
     return GestureDetector(
       onTap: _send,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: 52,
-        height: 52,
+      child: Container(
+        width: 48,
+        height: 48,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           gradient: LinearGradient(
@@ -543,16 +481,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
           ),
           boxShadow: [
             BoxShadow(
-              color: theme.colorScheme.primary.withValues(alpha: 0.35),
-              blurRadius: 15,
-              offset: const Offset(0, 6),
+              color: theme.colorScheme.primary.withValues(alpha: 0.3),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
         child: const Icon(
           Icons.send_rounded,
           color: Colors.white,
-          size: 22,
+          size: 20,
         ),
       ),
     );
