@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sine_ai/core/providers/app_providers.dart';
 import 'package:sine_ai/localization/app_strings.dart';
 import 'package:sine_ai/services/ai_service.dart';
@@ -17,13 +19,64 @@ class ChatScreen extends ConsumerStatefulWidget {
 class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStateMixin {
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
-  final List<Map<String, dynamic>> _messages = [
-    {
-      'text': AppStrings.get('chat_initial'),
-      'isUser': false,
-    }
-  ];
+  final List<Map<String, dynamic>> _messages = [];
   bool _isTyping = false;
+
+  static const int _maxMessages = 50;
+  static const String _storageKey = 'chat_messages';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMessages();
+  }
+
+  Future<void> _loadMessages() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final stored = prefs.getString(_storageKey);
+      if (stored != null) {
+        final List<dynamic> decoded = jsonDecode(stored);
+        setState(() {
+          _messages.addAll(decoded.cast<Map<String, dynamic>>());
+        });
+        if (_messages.isEmpty) {
+          setState(() {
+            _messages.add({
+              'text': AppStrings.get('chat_initial'),
+              'isUser': false,
+            });
+          });
+        }
+      } else {
+        setState(() {
+          _messages.add({
+            'text': AppStrings.get('chat_initial'),
+            'isUser': false,
+          });
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _messages.add({
+          'text': AppStrings.get('chat_initial'),
+          'isUser': false,
+        });
+      });
+    }
+  }
+
+  Future<void> _saveMessages() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final toSave = _messages.length > _maxMessages 
+          ? _messages.sublist(_messages.length - _maxMessages) 
+          : _messages;
+      await prefs.setString(_storageKey, jsonEncode(toSave));
+    } catch (e) {
+      // Silent fail
+    }
+  }
 
   @override
   void dispose() {
@@ -61,6 +114,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
         _messages.add({'text': reply, 'isUser': false});
       });
       _scrollToBottom();
+      await _saveMessages();
     }
   }
 
@@ -223,7 +277,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
             ListTile(
               leading: const Icon(Icons.delete_outline_rounded),
               title: const Text('Clear Chat'),
-              onTap: () {
+              onTap: () async {
                 setState(() {
                   _messages.clear();
                   _messages.add({
@@ -231,13 +285,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
                     'isUser': false,
                   });
                 });
-                Navigator.pop(context);
+                await _saveMessages();
+                if (context.mounted) Navigator.pop(context);
               },
             ),
             ListTile(
               leading: const Icon(Icons.refresh_rounded),
               title: const Text('New Chat'),
-              onTap: () {
+              onTap: () async {
                 setState(() {
                   _messages.clear();
                   _messages.add({
@@ -246,7 +301,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
                   });
                   AIService.clearHistory();
                 });
-                Navigator.pop(context);
+                await _saveMessages();
+                if (context.mounted) Navigator.pop(context);
               },
             ),
           ],
