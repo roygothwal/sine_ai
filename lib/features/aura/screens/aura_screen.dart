@@ -221,49 +221,30 @@ class _AuraScreenState extends ConsumerState<AuraScreen> with TickerProviderStat
 
     return Center(
       child: AnimatedBuilder(
-        animation: Listenable.merge([_floatController, _orbitController, _pulseController]),
+        animation: _floatController,
         builder: (_, __) {
-          final floatOffset = sin(_floatController.value * pi) * 15;
+          final floatOffset = sin(_floatController.value * pi) * 8;
           return Transform.translate(
             offset: Offset(0, floatOffset),
             child: SizedBox(
-              width: 260, height: 260,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Core Glow (Controlled)
-                  Container(
-                    width: 180 + _pulseController.value * 15,
-                    height: 180 + _pulseController.value * 15,
+              width: 320, height: 320,
+              child: Center(
+                child: Image.asset(
+                  'assets/images/aura_avatar_character.png',
+                  width: 280,
+                  height: 280,
+                  fit: BoxFit.contain,
+                  errorBuilder: (_, __, ___) => Container(
+                    width: 180,
+                    height: 180,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: theme.colorScheme.primary.withValues(alpha: 0.12 + _pulseController.value * 0.04),
-                          blurRadius: 30,
-                          spreadRadius: 5,
-                        ),
-                      ],
+                      gradient: LinearGradient(
+                        colors: [theme.colorScheme.primary, theme.colorScheme.secondary],
+                      ),
                     ),
                   ),
-                  // Orbit Rings
-                  Transform.rotate(
-                    angle: _orbitController.value * 2 * pi,
-                    child: _buildOrbitRing(220, theme.colorScheme.primary, 8),
-                  ),
-                  Transform.rotate(
-                    angle: -_orbitController.value * 2 * pi * 0.5,
-                    child: _buildOrbitRing(170, theme.colorScheme.secondary, 5),
-                  ),
-                  // Character Image
-                  Image.asset(
-                    'assets/images/aura_avatar_character.png',
-                    width: 200,
-                    height: 200,
-                    fit: BoxFit.contain,
-                    errorBuilder: (_, __, ___) => _buildFace(),
-                  ),
-                ],
+                ),
               ),
             ),
           );
@@ -362,35 +343,7 @@ class _AuraScreenState extends ConsumerState<AuraScreen> with TickerProviderStat
     final ext = theme.extension<AppThemeExtension>()!;
     final font = ref.watch(fontProvider);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: theme.colorScheme.primary.withValues(alpha: 0.05),
-          border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.1)),
-        ),
-        child: Row(
-          children: [
-            const Text('🔮', style: TextStyle(fontSize: 20)),
-            const SizedBox(width: 12),
-            Expanded(child: Text(AppStrings.get('voice_unlock'), style: GoogleFonts.getFont(font, fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.7), fontWeight: FontWeight.w600))),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                gradient: ext.primaryGradient ?? LinearGradient(colors: [theme.colorScheme.primary, theme.colorScheme.secondary]),
-              ),
-              child: Text(AppStrings.get('upgrade'), style: GoogleFonts.getFont(font, fontSize: 11, fontWeight: FontWeight.w900, color: Colors.white)),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildVoiceButton() {
+    Widget _buildVoiceButton() {
     final theme = Theme.of(context);
     final ext = theme.extension<AppThemeExtension>()!;
     final font = ref.watch(fontProvider);
@@ -401,7 +354,7 @@ class _AuraScreenState extends ConsumerState<AuraScreen> with TickerProviderStat
         onTap: _toggleVoice,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          height: 64,
+          height: 52,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(32),
             gradient: _isListening
