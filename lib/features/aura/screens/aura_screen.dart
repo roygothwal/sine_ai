@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:math';
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:sine_ai/core/providers/app_providers.dart';
 import 'package:sine_ai/localization/app_strings.dart';
 import 'package:sine_ai/core/services/usage_limit_service.dart';
@@ -22,12 +23,17 @@ class _AuraScreenState extends ConsumerState<AuraScreen> with TickerProviderStat
   late AnimationController _pulseController;
   late AnimationController _mouthController;
   late AnimationController _blinkController;
+  late FlutterTts _flutterTts;
 
   final _inputController = TextEditingController();
   bool _isSpeaking = false;
   final bool _isLoading = false;
   bool _isListening = false;
   String _auraMessage = "Hey! Main hun AURA — tera apna AI dost 🌟";
+  
+  // Character selection
+  String _selectedCharacter = 'girl';
+  String _selectedOutfit = 'saree';
 
   final List<String> _idleMessages = [
     "Aaj ka din kaisa raha? 😊",
@@ -44,6 +50,21 @@ class _AuraScreenState extends ConsumerState<AuraScreen> with TickerProviderStat
   @override
   void initState() {
     super.initState();
+
+    // TTS Setup
+    _flutterTts = FlutterTts();
+    _flutterTts.setLanguage("hi-IN"); // Hindi/English
+    _flutterTts.setSpeechRate(0.5);
+    _flutterTts.setVolume(1.0);
+    _flutterTts.setPitch(1.1);
+    
+    _flutterTts.setStartHandler(() {
+      setState(() => _isSpeaking = true);
+    });
+    
+    _flutterTts.setCompletionHandler(() {
+      setState(() => _isSpeaking = false);
+    });
 
     _floatController = AnimationController(
       vsync: this,
@@ -382,25 +403,30 @@ class _AuraScreenState extends ConsumerState<AuraScreen> with TickerProviderStat
                 : (ext.primaryGradient ?? LinearGradient(colors: [theme.colorScheme.primary, theme.colorScheme.secondary])),
             boxShadow: [
               BoxShadow(
-                color: (_isListening ? Colors.green : theme.colorScheme.primary).withValues(alpha: 0.25),
-                blurRadius: 12, offset: const Offset(0, 6),
+                color: (_isListening ? Colors.green : theme.colorScheme.primary).withValues(alpha: 0.2),
+                blurRadius: 8, offset: const Offset(0, 4),
               ),
             ],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(_isListening ? Icons.mic_rounded : Icons.mic_none_rounded, color: Colors.white, size: 28),
-              const SizedBox(width: 14),
+              Icon(_isListening ? Icons.mic_rounded : Icons.mic_none_rounded, color: Colors.white, size: 20),
+              const SizedBox(width: 10),
               Text(
                 _isListening ? 'Sun raha hun...' : 'AURA se baat karo',
-                style: GoogleFonts.getFont(font, fontSize: 16, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: 0.5),
+                style: GoogleFonts.getFont(font, fontSize: 14, fontWeight: FontWeight.w800, color: Colors.white, letterSpacing: 0.5),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+  
+  // TTS Speak Function
+  Future<void> _speakMessage(String message) async {
+    await _flutterTts.speak(message);
   }
 }
 

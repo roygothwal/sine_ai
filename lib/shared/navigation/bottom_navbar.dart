@@ -82,7 +82,7 @@ class BottomNav extends ConsumerWidget {
                   ] : null,
                 ),
                 child: ClipOval(
-                  child: Image.asset('assets/images/aura_avatar_3d_v2.png', fit: BoxFit.cover,
+                  child: Image.asset('assets/images/aura_avatar_character.png', fit: BoxFit.cover,
                     errorBuilder: (_, __, ___) => Icon(icon, color: Colors.white, size: 16),
                   ),
                 ),

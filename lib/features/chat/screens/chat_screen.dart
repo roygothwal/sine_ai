@@ -189,7 +189,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
             ),
             child: ClipOval(
               child: Image.asset(
-                'assets/images/aura_avatar_3d.png',
+                'assets/images/aura_avatar_character.png',
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => Icon(
                   Icons.smart_toy_rounded,
@@ -372,7 +372,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
       ),
       child: ClipOval(
         child: Image.asset(
-          'assets/images/aura_avatar_3d.png',
+          'assets/images/aura_avatar_character.png',
           fit: BoxFit.cover,
           errorBuilder: (_, __, ___) => Icon(
             Icons.smart_toy_rounded,
