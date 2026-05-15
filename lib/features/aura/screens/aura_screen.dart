@@ -165,7 +165,7 @@ class _AuraScreenState extends ConsumerState<AuraScreen> with TickerProviderStat
                   ],
                 ),
                 child: Image.asset(
-                  'assets/aura_character/aura_avatar_character_3d.png',
+                  'assets/aura_character/aura_avatar_character.png',
                   width: 280,
                   height: 280,
                   fit: BoxFit.contain,
