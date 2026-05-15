@@ -255,8 +255,14 @@ class _AuraScreenState extends ConsumerState<AuraScreen> with TickerProviderStat
                     angle: -_orbitController.value * 2 * pi * 0.5,
                     child: _buildOrbitRing(170, theme.colorScheme.secondary, 5),
                   ),
-                  // Face
-                  _buildFace(),
+                  // Character Image
+                  Image.asset(
+                    'assets/images/aura_avatar_character.png',
+                    width: 200,
+                    height: 200,
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, __, ___) => _buildFace(),
+                  ),
                 ],
               ),
             ),
