@@ -109,7 +109,6 @@ class _AuraScreenState extends ConsumerState<AuraScreen> with TickerProviderStat
           children: [
             _buildHeader(),
             Expanded(child: _buildCharacter()),
-            _buildMessage(),
             _buildVoiceButton(),
             const SizedBox(height: 20),
           ],
@@ -152,33 +151,20 @@ class _AuraScreenState extends ConsumerState<AuraScreen> with TickerProviderStat
             offset: Offset(0, floatY),
             child: Transform.scale(
               scale: breatheScale,
-              child: Container(
-                width: 300, height: 300,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: theme.colorScheme.primary.withValues(alpha: 0.15),
-                      blurRadius: 40,
-                      spreadRadius: 10,
+              child: Image.asset(
+                'assets/aura_character/aura_avatar_character.png',
+                width: 400,
+                height: 400,
+                fit: BoxFit.contain,
+                errorBuilder: (_, __, ___) => Container(
+                  width: 180, height: 180,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [theme.colorScheme.primary, theme.colorScheme.secondary],
                     ),
-                  ],
-                ),
-                child: Image.asset(
-                  'assets/aura_character/aura_avatar_character.png',
-                  width: 280,
-                  height: 280,
-                  fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) => Container(
-                    width: 180, height: 180,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        colors: [theme.colorScheme.primary, theme.colorScheme.secondary],
-                      ),
-                    ),
-                    child: Icon(Icons.smart_toy_rounded, color: Colors.white, size: 80),
                   ),
+                  child: Icon(Icons.smart_toy_rounded, color: Colors.white, size: 80),
                 ),
               ),
             ),
@@ -239,12 +225,14 @@ class _AuraScreenState extends ConsumerState<AuraScreen> with TickerProviderStat
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(_isListening ? Icons.mic_rounded : Icons.mic_none_rounded, color: Colors.white, size: 22),
-              const SizedBox(width: 10),
-              Text(
-                _isListening ? 'Listening...' : 'Aura se baat karo',
-                style: GoogleFonts.getFont('Inter', fontSize: 15, fontWeight: FontWeight.w700, color: Colors.white),
-              ),
+              Icon(_isListening ? Icons.mic_rounded : Icons.mic_none_rounded, color: Colors.white, size: 24),
+              if (_isListening) ...[
+                const SizedBox(width: 10),
+                Text(
+                  'Listening...',
+                  style: GoogleFonts.getFont('Inter', fontSize: 15, fontWeight: FontWeight.w700, color: Colors.white),
+                ),
+              ],
             ],
           ),
         ),
