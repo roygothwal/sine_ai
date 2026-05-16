@@ -42,3 +42,4 @@ flutter:
   assets:
     - assets/images/
     - assets/animations/
+    - assets/aura_character/
