@@ -105,12 +105,16 @@ class _AuraScreenState extends ConsumerState<AuraScreen> with TickerProviderStat
     return Container(
       color: theme.scaffoldBackgroundColor,
       child: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            _buildHeader(),
-            Expanded(child: _buildCharacter()),
+            Column(
+              children: [
+                _buildHeader(),
+                Expanded(child: _buildCharacter()),
+                const SizedBox(height: 80),
+              ],
+            ),
             _buildVoiceButton(),
-            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -126,11 +130,29 @@ class _AuraScreenState extends ConsumerState<AuraScreen> with TickerProviderStat
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('AURA', style: GoogleFonts.getFont(font, fontSize: 24, fontWeight: FontWeight.w900, color: theme.colorScheme.onSurface, letterSpacing: 2)),
-          Container(
-            width: 36, height: 36,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: theme.colorScheme.primary.withValues(alpha: 0.1)),
-            child: Icon(Icons.settings_outlined, color: theme.colorScheme.primary, size: 20),
+          Row(
+            children: [
+              Text('AURA', style: GoogleFonts.getFont(font, fontSize: 24, fontWeight: FontWeight.w900, color: theme.colorScheme.onSurface, letterSpacing: 2)),
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF10B981),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 6, height: 6,
+                      decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                    ),
+                    const SizedBox(width: 4),
+                    Text('Online', style: GoogleFonts.getFont('Inter', fontSize: 10, fontWeight: FontWeight.w600, color: Colors.white)),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -153,8 +175,8 @@ class _AuraScreenState extends ConsumerState<AuraScreen> with TickerProviderStat
               scale: breatheScale,
               child: Image.asset(
                 'assets/aura_character/aura_avatar_character.png',
-                width: 400,
-                height: 400,
+                width: MediaQuery.of(context).size.width * 0.95,
+                height: MediaQuery.of(context).size.width * 0.95,
                 fit: BoxFit.contain,
                 errorBuilder: (_, __, ___) => Container(
                   width: 180, height: 180,
@@ -202,40 +224,54 @@ class _AuraScreenState extends ConsumerState<AuraScreen> with TickerProviderStat
     final theme = Theme.of(context);
     final ext = theme.extension<AppThemeExtension>()!;
     
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: GestureDetector(
-        onTap: _toggleVoice,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          height: 52,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(26),
-            gradient: _isListening 
-                ? const LinearGradient(colors: [Color(0xFF10B981), Color(0xFF059669)])
-                : (ext.primaryGradient ?? LinearGradient(colors: [theme.colorScheme.primary, theme.colorScheme.secondary])),
-            boxShadow: [
-              BoxShadow(
-                color: theme.colorScheme.primary.withValues(alpha: 0.3),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
+    return Positioned(
+      right: 20,
+      bottom: 40,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              width: 64, height: 64,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: theme.colorScheme.surface,
+                border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.3), width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.15),
+                    blurRadius: 12,
+                    spreadRadius: 2,
+                  ),
+                ],
               ),
-            ],
+              child: Icon(Icons.auto_awesome_rounded, color: theme.colorScheme.primary, size: 28),
+            ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(_isListening ? Icons.mic_rounded : Icons.mic_none_rounded, color: Colors.white, size: 24),
-              if (_isListening) ...[
-                const SizedBox(width: 10),
-                Text(
-                  'Listening...',
-                  style: GoogleFonts.getFont('Inter', fontSize: 15, fontWeight: FontWeight.w700, color: Colors.white),
-                ),
-              ],
-            ],
+          const SizedBox(height: 20),
+          GestureDetector(
+            onTap: _toggleVoice,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: 64, height: 64,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: _isListening 
+                    ? const LinearGradient(colors: [Color(0xFF10B981), Color(0xFF059669)])
+                    : (ext.primaryGradient ?? LinearGradient(colors: [theme.colorScheme.primary, theme.colorScheme.secondary])),
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.4),
+                    blurRadius: 16,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Icon(_isListening ? Icons.mic_rounded : Icons.mic_none_rounded, color: Colors.white, size: 28),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
