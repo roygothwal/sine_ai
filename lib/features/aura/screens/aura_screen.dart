@@ -175,8 +175,8 @@ class _AuraScreenState extends ConsumerState<AuraScreen> with TickerProviderStat
               scale: breatheScale,
               child: Image.asset(
                 'assets/aura_character/aura_avatar_character.png',
-                width: MediaQuery.of(context).size.width * 0.95,
-                height: MediaQuery.of(context).size.width * 0.95,
+                width: MediaQuery.of(context).size.width * 0.110,
+                height: MediaQuery.of(context).size.width * 0.110,
                 fit: BoxFit.contain,
                 errorBuilder: (_, __, ___) => Container(
                   width: 180, height: 180,
